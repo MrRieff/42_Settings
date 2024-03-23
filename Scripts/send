@@ -1,0 +1,24 @@
+#!/bin/bash
+
+send() {
+    if [[ $# -eq 0 ]]; then
+        message="No Message"
+    else
+        message="$*"
+    fi
+
+    date=$(date +'%Y-%m-%d')
+
+    echo "Adding files..."
+    git add .
+
+    echo "Committing changes..."
+    git commit -m "$date: $message"
+
+    echo "Pushing changes..."
+    git push
+}
+
+send "$@"
+
+
