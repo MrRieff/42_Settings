@@ -1,0 +1,12 @@
+#SETTINGS FOR ALIAS
+
+#-----------GIT---------------
+alias send='~/Desktop/42/Settings/Scripts/send'
+
+#---------COMPILE-------------
+alias cc='cc -Wall -Wextra -Werror'
+
+#-----MAKEFILE-RUNNER------
+#source ~/Desktop/42/Settings/Scripts/MakefileRunner.sh
+alias edit_build='vim ~/Desktop/42/Settings/Scripts/MakefileRunner.sh'
+alias cleanall='make fclean && echo "Cleaning...\n" && clean && clear && echo "Everything got cleaned succesfully\n"'
