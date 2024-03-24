@@ -1,0 +1,5 @@
+#SETTINGS FOR LIBRARY PATHS
+
+#------------C------------
+#PATHS
+export CPATH="~/Desktop/42/Cursus/libft/libft.h"

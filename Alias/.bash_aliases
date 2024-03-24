@@ -1,7 +1,30 @@
-alias aliass='vim ~/.bash_aliases'
-alias update_alias='source ~/.bash_aliases'
 
-alias send='path/where/scripts/are/located'
-alias cc='cc -Wall -Wextra -Werror'
+#SETTINGS FOR PATHS AND SOURCES
 
-alias francinette=/home/johannes/francinette/tester.sh
+#-----------Edit--------------
+alias edit_path='vim ~/.zshrc'
+alias update_path='source ~/.zshrc'
+
+alias edit_alias='vim ~/.alias'
+alias update_alias='source ~/.alias'
+
+#----------Scripts------------
+source ~/Desktop/42/Settings/Scripts/MakefileRunner.sh
+source ~/Desktop/42/Settings/Alias/.alias
+
+if [ -f ~/.alias ]; then
+. ~/.alias
+fi
+
+#--------Francinette----------
+#alias francinette= (path)
+
+#--------Enviorment-----------
+export PATH=$PATH:/Users/ludvigrieff/.venv/bin
+alias env='source ~/Desktop/Enviorments/enviorments/base_env/bin/activate'
+
+#---------Homebrew------------
+export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+
+#-----------Pipx--------------
+export PATH="$PATH:/Users/ludvigrieff/.local/bin"
