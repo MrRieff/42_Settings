@@ -1,0 +1,79 @@
+#!/bin/bash
+
+# Specify the directories where your folders are located
+base_directories=(
+    "/home/johannes/Desktop/Github/Cursus"
+    "/home/johannes/Desktop/Github/Settings"
+    # Add more base directories as needed
+)
+
+# Function to open a folder or file in VS Code
+open_folder_or_file() {
+    local target_path="$1"
+
+    # Check if the target exists
+    if [ ! -e "$target_path" ]; then
+        echo "Not found: $target_path"
+        exit 1
+    fi
+
+    # Open the folder or file in VS Code
+    code "$target_path"
+}
+
+# Check if an argument is provided
+if [ $# -eq 0 ]; then
+    echo "Usage: open folder <folder_name> | open file <file_name>"
+    exit 1
+fi
+
+# Check the command type
+case "$1" in
+    "folder")
+        if [ $# -ne 2 ]; then
+            echo "Usage: open folder <folder_name>"
+            exit 1
+        fi
+        for base_directory in "${base_directories[@]}"; do
+            target_path="$base_directory/$2"
+            if [ -e "$target_path" ]; then
+                open_folder_or_file "$target_path"
+                exit 0
+            fi
+            # If not found directly in base directory, search subdirectories
+            found_folder=$(find "$base_directory" -type d -name "$2" -print -quit)
+            if [ -n "$found_folder" ]; then
+                open_folder_or_file "$found_folder"
+                exit 0
+            fi
+        done
+        echo "Folder not found: $2"
+        exit 1
+        ;;
+    "file")
+        if [ $# -ne 2 ]; then
+            echo "Usage: open file <file_name>"
+            exit 1
+        fi
+        for base_directory in "${base_directories[@]}"; do
+            # Check if the file is directly within the base directory
+            if [ -f "$base_directory/$2" ]; then
+                open_folder_or_file "$base_directory/$2"
+                exit 0
+            else
+                # Search for the file within subdirectories
+                found_file=$(find "$base_directory" -type f -name "$2" -print -quit)
+                if [ -n "$found_file" ]; then
+                    open_folder_or_file "$found_file"
+                    exit 0
+                fi
+            fi
+        done
+        echo "File not found: $2"
+        exit 1
+        ;;
+    *)
+        echo "Invalid command: $1"
+        exit 1
+        ;;
+esac

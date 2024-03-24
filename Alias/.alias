@@ -1,12 +1,18 @@
-#SETTINGS FOR ALIAS
+#SETTNGS FOR ALIAS
 
 #-----------GIT---------------
-alias send='~/Desktop/42/Settings/Scripts/send'
+alias send='~/Desktop/Github/Settings/Scripts/send'
+
+#-----------VS-Code-----------
+alias open='~/Desktop/Github/Settings/Scripts/open'
 
 #---------COMPILE-------------
 alias cc='cc -Wall -Wextra -Werror'
 
-#-----MAKEFILE-RUNNER------
-#source ~/Desktop/42/Settings/Scripts/MakefileRunner.sh
-alias edit_build='vim ~/Desktop/42/Settings/Scripts/MakefileRunner.sh'
+#-------MAKEFILE-RUNNER-------
 alias cleanall='make fclean && echo "Cleaning...\n" && clean && clear && echo "Everything got cleaned succesfully\n"'
+
+#----------SHORTCUTS----------
+alias cursus='cd ~/Desktop/Github/'
+alias settings='cd ~/Desktop/Github/Settings/'
+
