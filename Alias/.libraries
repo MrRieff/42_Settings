@@ -2,4 +2,4 @@
 
 #------------C------------
 #PATHS
-export CPATH="~/Desktop/42/Cursus/libft/libft.h"
+export CPATH="~/Desktop/Github/Cursus/libft/libft.h"

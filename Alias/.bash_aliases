@@ -17,6 +17,7 @@ source ~/Desktop/Github/Settings/Alias/.libraries
 
 #----------Scripts------------
 source ~/Desktop/Github/Settings/Scripts/MakefileRunner.sh
+source ~/Desktop/Github/Settings/Scripts/findopen
 
 if [ -f ~/Desktop/Github/Settings/Alias/.alias ]; then
 . ~/Desktop/Github/Settings/Alias/.alias

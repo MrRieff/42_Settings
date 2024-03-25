@@ -34,46 +34,56 @@ case "$1" in
             echo "Usage: open folder <folder_name>"
             exit 1
         fi
-        for base_directory in "${base_directories[@]}"; do
-            target_path="$base_directory/$2"
-            if [ -e "$target_path" ]; then
-                open_folder_or_file "$target_path"
-                exit 0
-            fi
-            # If not found directly in base directory, search subdirectories
-            found_folder=$(find "$base_directory" -type d -name "$2" -print -quit)
-            if [ -n "$found_folder" ]; then
-                open_folder_or_file "$found_folder"
-                exit 0
-            fi
-        done
-        echo "Folder not found: $2"
-        exit 1
+        search_name="$2"
+        search_type="directory"
         ;;
     "file")
         if [ $# -ne 2 ]; then
             echo "Usage: open file <file_name>"
             exit 1
         fi
-        for base_directory in "${base_directories[@]}"; do
-            # Check if the file is directly within the base directory
-            if [ -f "$base_directory/$2" ]; then
-                open_folder_or_file "$base_directory/$2"
-                exit 0
-            else
-                # Search for the file within subdirectories
-                found_file=$(find "$base_directory" -type f -name "$2" -print -quit)
-                if [ -n "$found_file" ]; then
-                    open_folder_or_file "$found_file"
-                    exit 0
-                fi
-            fi
-        done
-        echo "File not found: $2"
-        exit 1
+        search_name="$2"
+        search_type="file"
         ;;
     *)
-        echo "Invalid command: $1"
-        exit 1
+        # If type not specified, search for both folders and files
+        search_name="$1"
+        search_type="any"
         ;;
 esac
+
+# Perform the search based on the specified type
+match_count=0
+for base_directory in "${base_directories[@]}"; do
+    # Search for folders
+    if [ "$search_type" = "any" ] || [ "$search_type" = "directory" ]; then
+        found_folder=$(find "$base_directory" -type d -name "$search_name" -print -quit)
+        if [ -n "$found_folder" ]; then
+            match_count=$((match_count + 1))
+            if [ $match_count -gt 1 ]; then
+                echo "Multiple matches found for '$search_name'. Please specify whether it's a folder or a file."
+                exit 1
+            fi
+            open_folder_or_file "$found_folder"
+            exit 0
+        fi
+    fi
+
+    # Search for files
+    if [ "$search_type" = "any" ] || [ "$search_type" = "file" ]; then
+        found_file=$(find "$base_directory" -type f -name "$search_name" -print -quit)
+        if [ -n "$found_file" ]; then
+            match_count=$((match_count + 1))
+            if [ $match_count -gt 1 ]; then
+                echo "Multiple matches found for '$search_name'. Please specify whether it's a folder or a file."
+                exit 1
+            fi
+            open_folder_or_file "$found_file"
+            exit 0
+        fi
+    fi
+done
+
+# If no match found
+echo "No $search_type found with the name: $search_name"
+exit 1

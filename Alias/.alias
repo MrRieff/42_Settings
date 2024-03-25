@@ -5,6 +5,7 @@ alias send='~/Desktop/Github/Settings/Scripts/send'
 
 #-----------VS-Code-----------
 alias open='~/Desktop/Github/Settings/Scripts/open'
+alias find='~/Desktop/Github/Settings/Scripts/findopen_linux'
 
 #---------COMPILE-------------
 alias cc='cc -Wall -Wextra -Werror'
