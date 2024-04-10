@@ -55,7 +55,28 @@ list_files_and_folders() {
             echo -e "\033[1m\033[31mExiting.\033[0m"
             exit 0
         elif [ "$choice" -le "${#files[@]}" ]; then
-            open_in_vscode "${files[$((choice-1))]}"
+            local selected_file="${files[$((choice-1))]}"
+            echo "Selected file: $selected_file"
+            
+            # Prompt user to choose action
+            read -rp $'\033[1mDo you want to open in VS Code or copy its directory path?\n\n\033[0m\033[1m\033[32m1: \033[0mOpen in VS Code\033[0m\n\033[1m\033[32m2: \033[0mCopy directory path\033[0m\n\033[1m\033[31m0: \033[0mEXIT\033[0m\n\n\033[1mChoice:\033[0m ' action_choice
+
+            case "$action_choice" in
+                0)
+                    echo -e "\033[1m\033[31mExiting.\033[0m"
+                    exit 0
+                    ;;
+                1)
+                    open_in_vscode "$selected_file"
+                    ;;
+                2)
+                    copy_directory_path "$(dirname "$selected_file")"
+                    ;;
+                *)
+                    echo -e "\033[1m\033[31mInvalid choice. Exiting.\033[0m"
+                    exit 1
+                    ;;
+            esac
         else
             local folder_index=$(( choice - ${#files[@]} - 1 ))
             local selected_folder="${folders[$folder_index]}"
