@@ -1,11 +1,11 @@
 #SETTNGS FOR ALIAS
 
 #-----------GIT---------------
-alias send='~/Desktop/Github/Settings/Scripts/send'
+alias send='~/Desktop/42/Settings/Scripts/send'
 
 #-----------VS-Code-----------
-alias open='~/Desktop/Github/Settings/Scripts/open'
-alias find='~/Desktop/Github/Settings/Scripts/findopen_linux'
+alias open='~/Desktop/42/Settings/Scripts/open'
+alias find='~/Desktop/42/Settings/Scripts/findopen_mac'
 
 #---------COMPILE-------------
 alias cc='cc -Wall -Wextra -Werror'
@@ -14,6 +14,6 @@ alias cc='cc -Wall -Wextra -Werror'
 alias cleanall='make fclean && echo "Cleaning...\n" && clean && clear && echo "Everything got cleaned succesfully\n"'
 
 #----------SHORTCUTS----------
-alias cursus='cd ~/Desktop/Github/'
-alias settings='cd ~/Desktop/Github/Settings/'
+alias cursus='cd ~/Desktop/42/Cursus'
+alias settings='cd ~/Desktop/42/Settings/'
 

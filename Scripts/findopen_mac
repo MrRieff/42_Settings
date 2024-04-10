@@ -3,13 +3,14 @@
 # Function to open a file or folder in VS Code
 open_in_vscode() {
     local target_path="$1"
+    # On macOS, the command is "code" by default
     code "$target_path"
 }
 
 # Function to copy the directory path
 copy_directory_path() {
     local target_path="$1"
-    echo -n "$target_path" | pbcopy  # For macOS
+    echo -n "$target_path" | pbcopy  # On macOS, we use pbcopy to copy to the clipboard
     echo "Directory path copied to clipboard: $target_path"
 }
 
@@ -36,138 +37,22 @@ list_files_and_folders() {
     done
 
     # Print the list of files and folders
-    echo "Files and folders with the name '$search_name':"
+    printf "\033[1mFiles and folders with the name '%s':\033[0m\n" "$search_name"
+    printf "\033[1m\033[31m0: EXIT\033[0m\n" # Exit option in bold red
     for (( i=0; i<"${#files[@]}"; i++ )); do
-        echo -e "\e[35m$((i+1)): ${files[$i]}\e[0m"  # Purple color for files
+        printf "\033[1m\033[32m%d: \033[0m\033[95m\"%s\"\033[0m\n" $((i+1)) "${files[$i]}"  # Green color for numbers, pink for files
     done
     for (( i=0; i<"${#folders[@]}"; i++ )); do
-        echo -e "\e[36m$((i+1+${#files[@]})): ${folders[$i]}\e[0m"  # Teal color for folders
-    done
-}
-
-# Main function
-main() {
-    # Specify the base directories
-    base_directories=(
-        "/home/johannes/Desktop/Github/Cursus"
-        "/home/johannes/Desktop/Github/Settings"
-        # Add more base directories as needed
-    )
-
-    # Check if an argument is provided
-    if [ $# -eq 0 ]; then
-        echo "Usage: ./find_script.sh <search_name>"
-        exit 1
-    fi
-
-    search_name="$1"
-
-    # List files and folders with the specified name
-    list_files_and_folders "$search_name" "${base_directories[@]}"
-
-    # Prompt user for action
-    echo "Enter the number corresponding to the file or folder you want to select:"
-    echo -e "\e[31m0\e[0m: Exit"  # Red color
-    echo -e "\e[32m1\e[0m: Open in VS Code"  # Green color
-    echo -e "\e[32m2\e[0m: Copy directory path"  # Green color
-
-    read -rp "Your choice: " choice
-
-    case "$choice" in
-        1)
-            read -rp "Enter the number corresponding to the file or folder you want to open: " selection
-            if [[ "$selection" =~ ^[0-9]+$ ]] && [ "$selection" -gt 0 ] && [ "$selection" -le "$(( ${#files[@]} + ${#folders[@]} ))" ]; then
-                if [ "$selection" -le "${#files[@]}" ]; then
-                    open_in_vscode "${files[$((selection-1))]}"
-                else
-                    open_in_vscode "${folders[$((selection - ${#files[@]} - 1))]}"
-                fi
-            else
-                echo "Invalid selection. Exiting."
-                exit 1
-            fi
-            ;;
-        2)
-            read -rp "Enter the number corresponding to the file or folder you want to copy its directory path: " selection
-            if [[ "$selection" =~ ^[0-9]+$ ]] && [ "$selection" -gt 0 ] && [ "$selection" -le "$(( ${#files[@]} + ${#folders[@]} ))" ]; then
-                if [ "$selection" -le "${#files[@]}" ]; then
-                    copy_directory_path "$(dirname "${files[$((selection-1))]}")"
-                else
-                    copy_directory_path "${folders[$((selection - ${#files[@]} - 1))]}"
-                fi
-            else
-                echo "Invalid selection. Exiting."
-                exit 1
-            fi
-            ;;
-        0)
-            echo "Exiting."
-            exit 0
-            ;;
-        *)
-            echo "Invalid choice. Exiting."
-            exit 1
-            ;;
-    esac
-}
-
-main "$@"
-
-#For Linux - Make sure to install xclip
-#!/bin/bash
-
-# Function to open a file or folder in VS Code
-open_in_vscode() {
-    local target_path="$1"
-    code "$target_path"
-}
-
-# Function to copy the directory path
-copy_directory_path() {
-    local target_path="$1"
-    echo -n "$target_path" | xclip -selection clipboard  # For Linux
-    echo "Directory path copied to clipboard: $target_path"
-}
-
-# Function to list files and folders with a specific name
-list_files_and_folders() {
-    local search_name="$1"
-    local base_directories=("${@:2}")
-    local files=()
-    local folders=()
-
-    # Find files and folders with the specified name in base directories and their subdirectories
-    for base_directory in "${base_directories[@]}"; do
-        # Find files
-        while IFS= read -r -d '' file; do
-            files+=("$file")
-        done < <(find "$base_directory" -type f -iname "*$search_name*" -print0)
-
-        # Find folders
-        while IFS= read -r -d '' folder; do
-            if [ "$folder" != "$base_directory" ]; then
-                folders+=("$folder")
-            fi
-        done < <(find "$base_directory" -mindepth 1 -type d -iname "$search_name" -print0)
-    done
-
-    # Print the list of files and folders
-    echo -e "\e[1mFiles and folders with the name '$search_name':\e[0m"
-    echo -e "\e[31m0: EXIT\e[0m" # Exit option in red
-    for (( i=0; i<"${#files[@]}"; i++ )); do
-        echo -e "\e[95m$((i+1)): \"${files[$i]}\"\e[0m"  # Pink color for files
-    done
-    for (( i=0; i<"${#folders[@]}"; i++ )); do
-        echo -e "\e[36m$((i+1+${#files[@]})): \"${folders[$i]}\"\e[0m"  # Teal color for folders
+        printf "\033[1m\033[32m%d: \033[0m\033[96m\"%s\"\033[0m\n" $((i+1+${#files[@]})) "${folders[$i]}"  # Green color for numbers, teal for folders
     done
 
     # Prompt user to select a file or folder
-    read -rp $'\e[1mEnter the number corresponding to the file or folder you want to select:\e[0m ' choice
+    read -rp $'\033[1mEnter the number corresponding to the file or folder you want to select:\033[0m ' choice
 
     # Check user choice
     if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 0 ] && [ "$choice" -le "$(( ${#files[@]} + ${#folders[@]} ))" ]; then
         if [ "$choice" -eq 0 ]; then
-            echo -e "\e[31mExiting.\e[0m"
+            echo -e "\033[1m\033[31mExiting.\033[0m"
             exit 0
         elif [ "$choice" -le "${#files[@]}" ]; then
             open_in_vscode "${files[$((choice-1))]}"
@@ -177,10 +62,11 @@ list_files_and_folders() {
             echo "Selected folder: $selected_folder"
             
             # Prompt user to choose action
-            read -rp $'\e[1mDo you want to open in VS Code or copy its directory path?\n1: Open in VS Code\n2: Copy directory path\n0: Exit\e[0m ' action_choice
+            read -rp $'\033[1mDo you want to open in VS Code or copy its directory path?\n\n\033[0m\033[1m\033[32m1: \033[0mOpen in VS Code\033[0m\n\033[1m\033[32m2: \033[0mCopy directory path\033[0m\n\033[1m\033[31m0: \033[0mEXIT\033[0m\n\n\033[1mChoice:\033[0m ' action_choice
+
             case "$action_choice" in
                 0)
-                    echo -e "\e[31mExiting.\e[0m"
+                    echo -e "\033[1m\033[31mExiting.\033[0m"
                     exit 0
                     ;;
                 1)
@@ -190,13 +76,13 @@ list_files_and_folders() {
                     copy_directory_path "$selected_folder"
                     ;;
                 *)
-                    echo -e "\e[31mInvalid choice. Exiting.\e[0m"
+                    echo -e "\033[1m\033[31mInvalid choice. Exiting.\033[0m"
                     exit 1
                     ;;
             esac
         fi
     else
-        echo -e "\e[31mInvalid selection. Exiting.\e[0m"
+        echo -e "\033[1m\033[31mInvalid selection. Exiting.\033[0m"
         exit 1
     fi
 }
@@ -205,14 +91,14 @@ list_files_and_folders() {
 main() {
     # Specify the base directories
     base_directories=(
-        "/home/johannes/Desktop/Github/Cursus"
-        "/home/johannes/Desktop/Github/Settings"
+        "/Users/ludvigrieff/Desktop/42/Cursus"
+        "/Users/ludvigrieff/Desktop/42/Settings"
         # Add more base directories as needed
     )
 
     # Check if an argument is provided
     if [ $# -eq 0 ]; then
-        echo "Usage: ./find_script.sh <search_name>"
+        echo "Usage: ./find <search_name>"
         exit 1
     fi
 

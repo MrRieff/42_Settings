@@ -17,42 +17,18 @@ fi
 PS: This will not have any further support, altough it might have some updates
 Author: Ludvig Johannes Rieff
 
+In case of being in a mac os here is what you'll need to do in case of the code command doesn't work:
 
+Step 1: Go to vscode, and press cmd + Shift + P
+Step 2: Write the word 'code' and press Enter
 
+If that gives you a permission error:
+Step 3: Enter this on your terminal
 
+sudo ln -s /Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code /usr/local/bin/
 
+Step 4: Enter this on your terminal
 
+sudo chmod o+w /usr/local/bin
 
-
-
-Example
-#SETTINGS FOR PATHS AND SOURCES
-
-#-----------Edit--------------
-alias edit_path='vim ~/.zshrc'
-alias update_path='source ~/.zshrc'
-
-alias edit_alias='vim ~/.alias'
-alias update_alias='source ~/.alias'
-
-#----------Scripts------------
-source ~/Desktop/42/Settings/Scripts/MakefileRunner.sh
-source ~/Desktop/42/Settings/Alias/.alias
-
-if [ -f ~/.alias ]; then
-. ~/.alias
-fi
-
-#--------Francinette----------
-#alias francinette= (path)
-
-#--------Enviorment-----------
-export PATH=$PATH:/Users/ludvigrieff/.venv/bin
-alias env='source ~/Desktop/Enviorments/enviorments/base_env/bin/activate'
-
-#---------Homebrew------------
-export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-
-#-----------Pipx--------------
-export PATH="$PATH:/Users/ludvigrieff/.local/bin"
-
+Finished, everything should work after a terminal restart
