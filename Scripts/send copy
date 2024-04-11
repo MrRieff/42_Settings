@@ -1,0 +1,18 @@
+#!/bin/bash
+
+receive() {
+    echo "Receiving Files..."
+    sleep 1
+
+    echo "Downloading Files..."
+    sleep 1
+    git pull
+    clear
+    echo "Applying Changes..."
+    sleep 3
+    echo "You succesfully pulled from your git"
+}
+
+receive "$@"
+
+

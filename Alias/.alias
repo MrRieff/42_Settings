@@ -2,6 +2,7 @@
 
 #-----------GIT---------------
 alias send='~/Desktop/42/Settings/Scripts/send'
+alias receive='~/Desktop/42/Settings/Scripts/receive'
 
 #-----------VS-Code-----------
 alias open='~/Desktop/42/Settings/Scripts/open'

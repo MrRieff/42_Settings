@@ -10,13 +10,20 @@ send() {
     date=$(date +'%Y-%m-%d')
 
     echo "Adding files..."
+    sleep 1
     git add .
+    clear
 
     echo "Committing changes..."
+    sleep 1
     git commit -m "$date: $message"
 
+
     echo "Pushing changes..."
+    sleep 1
     git push
+
+    echo "Everything is now up-to-date! :D"
 }
 
 send "$@"
