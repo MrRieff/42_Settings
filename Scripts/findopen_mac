@@ -75,7 +75,7 @@ prompt_action() {
         # Ask if user wants to perform another action or exit
         sleep 1
         echo -e "\033[1mDo you want to perform another action or exit?\033[0m"
-        echo -e "\033[1m\033[32m1: \033[0mTry again"
+        echo -e "\033[1m\033[32m1: \033[0mGo back to Action Menu"
         echo -e "\033[1m\033[31m0: \033[0mExit"
         read -rp $'\033[1mChoice: \033[0m' continue_choice
         case "$continue_choice" in
@@ -118,7 +118,7 @@ list_files_and_folders() {
 
     # Print the list of files and folders
     printf "\033[1mFiles and folders with the name '%s':\033[0m\n" "$search_name"
-    printf "\033[1m\033[31m9: \033[0mBack\n" # Back option in red
+    #printf "\033[1m\033[31m9: \033[0mBack\n" # Back option in red
     printf "\033[1m\033[31m0: \033[0mExit\n" # Exit option in red
     for (( i=0; i<"${#files[@]}"; i++ )); do
         printf "\033[1m\033[32m%d: \033[0m\033[95m\"%s\"\033[0m\n" $((i+1)) "${files[$i]}"  # Green color for numbers, pink for files
