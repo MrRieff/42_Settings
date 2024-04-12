@@ -27,21 +27,38 @@ format_directory() {
     echo "Formatting in $directory complete."
 }
 
-# Function to prompt user for formatting
-prompt_format() {
-    local file="$1"
-    read -rp $'\033[1mDo you want to format this file?\n\n\033[0m\033[1m\033[32m1: \033[0mFormat\033[0m\n\033[1m\033[31m0: \033[0mSkip\033[0m\n\n\033[1mChoice:\033[0m ' format_choice
+# Function to prompt user for action
+prompt_action() {
+    local target_path="$1"
+    echo -e "\033[1mDo you want to open the directory in VS Code, copy its path, format files, or navigate to it in the terminal?\033[0m"
+    echo -e "\033[1m\033[32m1: \033[0mOpen in VS Code"
+    echo -e "\033[1m\033[32m2: \033[0mFormat files with C_Formatter_42"
+    echo -e "\033[1m\033[32m3: \033[0mNavigate to Directory in Terminal"
+    echo -e "\033[1m\033[32m4: \033[0mCopy Directory"
+    echo -e "\033[1m\033[31m0: \033[0mEXIT"
+    read -rp $'\033[1mChoice: \033[0m' action_choice
 
-    case "$format_choice" in
+    case "$action_choice" in
         0)
-            echo "Skipped formatting file: $file"
+            echo "Exiting."
+            exit 0
             ;;
         1)
-            c_formatter_42 "$file"
-            echo "Formatted file: $file"
+            open_in_vscode "$target_path"
+            ;;
+        2)
+            format_directory "$target_path"
+            ;;
+        3)
+            cd "$target_path" || { echo "Failed to navigate to directory."; exit 1; }
+            echo "Navigated to directory: $target_path"
+            ;;
+        4)
+            copy_directory_path "$target_path"
             ;;
         *)
-            echo "Invalid choice. Skipping formatting of file: $file"
+            echo "Invalid choice. Exiting."
+            exit 1
             ;;
     esac
 }
@@ -89,48 +106,12 @@ list_files_and_folders() {
         elif [ "$choice" -le "${#files[@]}" ]; then
             local selected_file="${files[$((choice-1))]}"
             echo "Selected file: $selected_file"
-            
-            # Prompt user to format the selected file
-            prompt_format "$selected_file"
         else
             local folder_index=$(( choice - ${#files[@]} - 1 ))
             local selected_folder="${folders[$folder_index]}"
             echo "Selected folder: $selected_folder"
-            
             # Prompt user to choose action for the selected folder
-            read -rp $'\033[1mDo you want to format all files in this directory and its subdirectories?\n\n\033[0m\033[1m\033[32m1: \033[0mFormat all files\033[0m\n\033[1m\033[31m0: \033[0mSkip\033[0m\n\n\033[1mChoice:\033[0m ' format_choice
-
-            case "$format_choice" in
-                0)
-                    echo "Skipped formatting directory: $selected_folder"
-                    ;;
-                1)
-                    format_directory "$selected_folder"
-                    ;;
-                *)
-                    echo "Invalid choice. Skipping formatting of directory: $selected_folder"
-                    ;;
-            esac
-
-            # After formatting, prompt user to choose action for the selected folder
-            read -rp $'\033[1mDo you want to open in VS Code or copy its directory path?\n\n\033[0m\033[1m\033[32m1: \033[0mOpen in VS Code\033[0m\n\033[1m\033[32m2: \033[0mCopy directory path\033[0m\n\033[1m\033[31m0: \033[0mEXIT\033[0m\n\n\033[1mChoice:\033[0m ' action_choice
-
-            case "$action_choice" in
-                0)
-                    echo -e "\033[1m\033[31mExiting.\033[0m"
-                    exit 0
-                    ;;
-                1)
-                    open_in_vscode "$selected_folder"
-                    ;;
-                2)
-                    copy_directory_path "$selected_folder"
-                    ;;
-                *)
-                    echo -e "\033[1m\033[31mInvalid choice. Exiting.\033[0m"
-                    exit 1
-                    ;;
-            esac
+            prompt_action "$selected_folder"
         fi
     else
         echo -e "\033[1m\033[31mInvalid selection. Exiting.\033[0m"
