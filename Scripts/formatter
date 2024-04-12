@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Define base directories with expanded paths
+BASE_DIRECTORIES=(
+    "$HOME/Desktop/42/Cursus/ongoing"
+    # Add more directories if needed
+)
+
+# Loop through each base directory
+for dir in "${BASE_DIRECTORIES[@]}"; do
+    # Check if the directory exists
+    if [ -d "$dir" ]; then
+        echo "Formatting files in $dir and its subdirectories..."
+        # Use find command to locate all .c and .h files within the directory and its subdirectories
+        # Pipe the results to xargs to execute the formatting command for each file
+        find "$dir" -type f \( -name "*.c" -o -name "*.h" \) -print0 | while IFS= read -r -d '' file; do
+            # Call the formatter for each file
+            c_formatter_42 "$file"
+        done
+        echo "Formatting in $dir complete."
+    else
+        echo "Directory $dir not found. Skipping..."
+    fi
+done
+
+echo "All formatting completed."
