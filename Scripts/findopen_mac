@@ -12,6 +12,7 @@ copy_directory_path() {
     local target_path="$1"
     echo -n "$target_path" | pbcopy  # On macOS, we use pbcopy to copy to the clipboard
     echo "Directory path copied to clipboard: $target_path"
+    sleep 2
 }
 
 # Function to format all .c and .h files in a directory and its subdirectories
@@ -30,37 +31,38 @@ format_directory() {
 # Function to prompt user for action
 prompt_action() {
     local target_path="$1"
-    echo -e "\033[1mDo you want to open the directory in VS Code, copy its path, format files, or navigate to it in the terminal?\033[0m"
-    echo -e "\033[1m\033[32m1: \033[0mOpen in VS Code"
-    echo -e "\033[1m\033[32m2: \033[0mFormat files with C_Formatter_42"
-    echo -e "\033[1m\033[32m3: \033[0mNavigate to Directory in Terminal"
-    echo -e "\033[1m\033[32m4: \033[0mCopy Directory"
-    echo -e "\033[1m\033[31m0: \033[0mEXIT"
-    read -rp $'\033[1mChoice: \033[0m' action_choice
+    while true; do
+        echo -e "\033[1mDo you want to open the directory in VS Code, copy its path, format files, or navigate to it in the terminal?\033[0m"
+        echo -e "\033[1m\033[32m1: \033[0mOpen in VS Code"
+        echo -e "\033[1m\033[32m2: \033[0mFormat files with C_Formatter_42"
+        echo -e "\033[1m\033[32m3: \033[0mNavigate to Directory in Terminal"
+        echo -e "\033[1m\033[32m4: \033[0mCopy Directory"
+        echo -e "\033[1m\033[31m0: \033[0mReturn to selection prompt menu"
+        read -rp $'\033[1mChoice: \033[0m' action_choice
 
-    case "$action_choice" in
-        0)
-            echo "Exiting."
-            exit 0
-            ;;
-        1)
-            open_in_vscode "$target_path"
-            ;;
-        2)
-            format_directory "$target_path"
-            ;;
-        3)
-            cd "$target_path" || { echo "Failed to navigate to directory."; exit 1; }
-            echo "Navigated to directory: $target_path"
-            ;;
-        4)
-            copy_directory_path "$target_path"
-            ;;
-        *)
-            echo "Invalid choice. Exiting."
-            exit 1
-            ;;
-    esac
+        case "$action_choice" in
+            0)
+                echo "Returning to selection prompt menu."
+                break
+                ;;
+            1)
+                open_in_vscode "$target_path"
+                ;;
+            2)
+                format_directory "$target_path"
+                ;;
+            3)
+                cd "$target_path" || { echo "Failed to navigate to directory."; exit 1; }
+                echo "Navigated to directory: $target_path"
+                ;;
+            4)
+                copy_directory_path "$target_path"
+                ;;
+            *)
+                echo "Invalid choice."
+                ;;
+        esac
+    done
 }
 
 # Function to list files and folders with a specific name
