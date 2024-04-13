@@ -8,6 +8,7 @@ alias receive='~/Desktop/42/Settings/Scripts/receive'
 #-----------VS-Code-----------
 alias open='~/Desktop/42/Settings/Scripts/open'
 alias find='~/Desktop/42/Settings/Scripts/findopen_mac'
+alias goto='~/Desktop/42/Settings/Scripts/goto'
 
 #---------COMPILE-------------
 alias cc='cc -Wall -Wextra -Werror'

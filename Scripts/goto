@@ -1,0 +1,95 @@
+#!/bin/bash
+
+# Define color variables
+TEAL='\033[1;36m' # Bold teal
+RED='\033[1;31m'  # Bold red
+NC='\033[0m'      # No color
+
+# Define base directories
+BASE_DIRECTORIES=(
+    "/Users/ludvigrieff/Desktop/42/Cursus"
+    "/Users/ludvigrieff/Desktop/42/Settings"
+    # Add more base directories as needed
+)
+
+# Function to close the current terminal tab
+close_tab() {
+    if [ -n "$ITERM_SESSION_ID" ]; then
+        # iTerm2
+        osascript -e 'tell application "iTerm" to tell the first window to close current session'
+    elif [ -n "$TERM_PROGRAM" ] && [ "$TERM_PROGRAM" == "Apple_Terminal" ]; then
+        # Terminal.app
+        osascript -e 'tell application "Terminal" to close front window'
+    fi
+}
+
+# Define the function to search for directories
+goto() {
+    # Get the input directory name
+    local dirname="$1"
+    
+    # Array to store all directories found
+    local all_directories=()
+
+    # Loop through each base directory
+    for dir in "${BASE_DIRECTORIES[@]}"; do
+        # Search for directories with the input name
+        local directories=($(find "$dir" -maxdepth 2 -type d -name "*$dirname*"))
+
+        # Add found directories to the array
+        for d in "${directories[@]}"; do
+            all_directories+=("$d")
+        done
+    done
+
+    # Check if directories are found
+    if [ ${#all_directories[@]} -eq 0 ]; then
+        echo "No directories found with the name '$dirname'."
+        return 1
+    fi
+
+    # Add an exit option
+    all_directories+=("Exit")
+
+    # Prompt user to select a directory
+    PS3="${RED}Select a directory:${NC} "
+    echo "Available directories:"
+    for ((i=0; i<${#all_directories[@]}; i++)); do
+        if [ "$i" -eq $((${#all_directories[@]}-1)) ]; then
+            echo -e "${RED}  0) ${all_directories[i]}${NC}"
+        else
+            echo -e "${TEAL}  $((i+1))) ${all_directories[i]}${NC}"
+        fi
+    done
+    read -rp "Enter your choice: " choice
+
+    if [[ "$choice" == "0" ]]; then
+        echo "Exiting..."
+        close_tab
+        return 0
+    elif [[ "$choice" =~ ^[1-9]+$ && "$choice" -le "${#all_directories[@]}" ]]; then
+        selected_directory="${all_directories[choice-1]}"
+        
+        # Clear the terminal
+        clear
+        
+        if [ -n "$ITERM_SESSION_ID" ]; then
+            # iTerm2
+            osascript -e "tell application \"iTerm\" to tell current session of first window to write text \"cd '$selected_directory'\""
+        elif [ -n "$TERM_PROGRAM" ] && [ "$TERM_PROGRAM" == "Apple_Terminal" ]; then
+            # Terminal.app
+            osascript -e "tell application \"Terminal\" to do script \"cd '$selected_directory'\" in front window"
+        else
+            echo "Unsupported terminal application."
+            return 1
+        fi
+
+        echo "Successfully moved to $selected_directory"
+    else
+        echo "Invalid option. Please select a valid directory or 0 to exit."
+        return 1
+    fi
+}
+
+# Call the function with the provided directory name
+goto "$1"
