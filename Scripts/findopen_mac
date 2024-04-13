@@ -27,23 +27,23 @@ format_directory() {
     echo "Formatting in $directory complete."
 }
 
-# Function to navigate to a directory in terminal
-navigate_to_directory() {
+# Function to open the terminal in the specified directory
+open_in_terminal() {
     local target_path="$1"
-    cd "$target_path" || { echo "Failed to navigate to directory."; exit 1; }
-    echo "Navigated to directory: $target_path"
+    osascript -e "tell application \"iTerm\"" -e "tell current window" -e "create tab with default profile" -e "tell current session to write text \"cd $target_path && clear\"" -e "end tell" -e "end tell"
 }
 
 # Function to prompt user for action
 prompt_action() {
     local target_path="$1"
-    while true; do
+    local choice=1
+
+    while [ "$choice" -ne 0 ]; do
         echo -e "\033[1mDo you want to open the directory in VS Code, copy its path, format files, or navigate to it in the terminal?\033[0m"
         echo -e "\033[1m\033[32m1: \033[0mOpen in VS Code"
         echo -e "\033[1m\033[32m2: \033[0mFormat files with C_Formatter_42"
         echo -e "\033[1m\033[32m3: \033[0mNavigate to Directory in Terminal"
         echo -e "\033[1m\033[32m4: \033[0mCopy Directory"
-        echo -e "\033[1m\033[31m9: \033[0mBack"
         echo -e "\033[1m\033[31m0: \033[0mExit"
         read -rp $'\033[1mChoice: \033[0m' action_choice
 
@@ -59,38 +59,22 @@ prompt_action() {
                 format_directory "$target_path"
                 ;;
             3)
-                navigate_to_directory "$target_path"
+                echo "Navigating to directory: $target_path"
+                open_in_terminal "$target_path"  # Function to open the terminal in the specified directory
                 ;;
             4)
                 copy_directory_path "$target_path"
-                ;;
-            9)
-                return 1  # Return flag indicating back to the caller function
                 ;;
             *)
                 echo "Invalid choice."
                 ;;
         esac
 
-        # Ask if user wants to perform another action or exit
-        sleep 1
+        # Prompt user to go back to action menu prompt or exit
         echo -e "\033[1mDo you want to perform another action or exit?\033[0m"
-        echo -e "\033[1m\033[32m1: \033[0mGo back to Action Menu"
+        echo -e "\033[1m\033[32m1: \033[0mGo Back to Action Menu"
         echo -e "\033[1m\033[31m0: \033[0mExit"
-        read -rp $'\033[1mChoice: \033[0m' continue_choice
-        case "$continue_choice" in
-            0)
-                echo "Exiting."
-                exit 0
-                ;;
-            1)
-                break
-                ;;
-            *)
-                echo "Invalid choice. Exiting."
-                exit 1
-                ;;
-        esac
+        read -rp $'\033[1mChoice: \033[0m' choice
     done
 }
 
@@ -118,8 +102,7 @@ list_files_and_folders() {
 
     # Print the list of files and folders
     printf "\033[1mFiles and folders with the name '%s':\033[0m\n" "$search_name"
-    #printf "\033[1m\033[31m9: \033[0mBack\n" # Back option in red
-    printf "\033[1m\033[31m0: \033[0mExit\n" # Exit option in red
+    printf "\033[1m\033[31m0: \033[0mEXIT\033[0m\n" # Exit option in bold red
     for (( i=0; i<"${#files[@]}"; i++ )); do
         printf "\033[1m\033[32m%d: \033[0m\033[95m\"%s\"\033[0m\n" $((i+1)) "${files[$i]}"  # Green color for numbers, pink for files
     done
@@ -135,8 +118,6 @@ list_files_and_folders() {
         if [ "$choice" -eq 0 ]; then
             echo -e "\033[1m\033[31mExiting.\033[0m"
             exit 0
-        elif [ "$choice" -eq 9 ]; then
-            return 0  # Return flag indicating back to the caller function
         elif [ "$choice" -le "${#files[@]}" ]; then
             local selected_file="${files[$((choice-1))]}"
             echo "Selected file: $selected_file"
@@ -171,10 +152,7 @@ main() {
     search_name="$1"
 
     # List files and folders with the specified name
-    while true; do
-        list_files_and_folders "$search_name" "${base_directories[@]}"
-        echo "Returning to directory selection..."
-    done
+    list_files_and_folders "$search_name" "${base_directories[@]}"
 }
 
 main "$@"
