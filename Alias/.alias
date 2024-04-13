@@ -8,7 +8,7 @@ alias receive='~/Desktop/42/Settings/Scripts/receive'
 #-----------VS-Code-----------
 alias open='~/Desktop/42/Settings/Scripts/open'
 alias find='~/Desktop/42/Settings/Scripts/findopen_mac'
-alias goto='~/Desktop/42/Settings/Scripts/goto'
+alias goto='~/Desktop/42/Settings/Scripts/goto_mac'
 
 #---------COMPILE-------------
 alias cc='cc -Wall -Wextra -Werror'
@@ -19,5 +19,5 @@ alias cleanall='make fclean && echo "Cleaning...\n" && clean && clear && echo "E
 #----------SHORTCUTS----------
 alias cursus='cd ~/Desktop/42/Cursus'
 alias settings='cd ~/Desktop/42/Settings/'
-#alias format='c_formatter_42'
-#alias formatall='~/Desktop/42/Settings/Scripts/formatter'
+alias format='c_formatter_42'
+alias formatall='~/Desktop/42/Settings/Scripts/formatter'

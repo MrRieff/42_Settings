@@ -73,6 +73,8 @@ goto() {
         # Clear the terminal
         clear
         
+        echo "Successfully moved to $selected_directory"
+        
         if [ -n "$ITERM_SESSION_ID" ]; then
             # iTerm2
             osascript -e "tell application \"iTerm\" to tell current session of first window to write text \"cd '$selected_directory'\""
@@ -83,8 +85,6 @@ goto() {
             echo "Unsupported terminal application."
             return 1
         fi
-
-        echo "Successfully moved to $selected_directory"
     else
         echo "Invalid option. Please select a valid directory or 0 to exit."
         return 1
