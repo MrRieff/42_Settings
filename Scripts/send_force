@@ -27,4 +27,3 @@ send_force() {
 }
 
 send_force "$@"
-
