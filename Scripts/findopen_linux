@@ -152,8 +152,9 @@ list_files_and_folders() {
 main() {
     # Specify the base directories
     base_directories=(
-        "/home/lualbuqu/Desktop/42/Cursus"
-        "/home/lualbuqu/Desktop/42/Settings"
+        "/home/johannes/Desktop/Github"
+	    "/home/johannes/Settings"
+        #"/home/lualbuqu/Desktop/42/Settings"
         # Add more base directories as needed
     )
 
