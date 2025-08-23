@@ -7,8 +7,7 @@ NC='\033[0m'      # No color
 
 # Define base directories
 BASE_DIRECTORIES=(
-    "/Users/ludvigrieff/Desktop/42/Cursus"
-    "/Users/ludvigrieff/Desktop/42/Settings"
+    "/Users/lualbuqu/Desktop/"
     # Add more base directories as needed
 )
 

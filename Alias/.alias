@@ -1,23 +1,33 @@
 #SETTNGS FOR ALIAS
 
 #-----------GIT---------------
-alias send='~/Desktop/42/Settings/Scripts/send'
-alias sendf='~/Desktop/42/Settings/Scripts/send_force'
-alias receive='~/Desktop/42/Settings/Scripts/receive'
+alias send='~/Desktop/.settings/Scripts/send'
+alias sendf='~/Desktop/.settings/Scripts/send_force'
+alias receive='~/Desktop/.settings/Scripts/receive'
 
 #-----------VS-Code-----------
-alias open='~/Desktop/42/Settings/Scripts/open'
-alias find='~/Desktop/42/Settings/Scripts/findopen_mac'
-alias goto='~/Desktop/42/Settings/Scripts/goto_mac'
+alias open='~/Desktop/.settings/Scripts/open'
+alias find='~/Desktop/.settings/Scripts/findopen_mac'
+alias goto='~/Desktop/.settings/Scripts/goto_mac'
 
 #---------COMPILE-------------
 alias cc='cc -Wall -Wextra -Werror'
 
-#-------MAKEFILE-RUNNER-------
-alias cleanall='make fclean && echo "Cleaning...\n" && clean && clear && echo "Everything got cleaned succesfully\n"'
-
 #----------SHORTCUTS----------
 alias cursus='cd ~/Desktop/42/Cursus'
-alias settings='cd ~/Desktop/42/Settings/'
+alias settings='cd ~/Desktop/.settings/'
 alias format='c_formatter_42'
-alias formatall='~/Desktop/42/Settings/Scripts/formatter'
+alias formatall='~/Desktop/.settings/Scripts/formatter'
+
+alias git_update='cd ~/Desktop && rm -rf Github && git clone git@github.com:MrRieff/42.git Github && cd Github'
+alias mini='cd ~/Desktop && rm -rf Minishell && git clone git@github.com:MrRieff/Minishell.git Minishell && cd Minishell && cursor .'
+
+
+alias update_pa='cd ~/Desktop && rm -rf ParkingAid && mkdir ParkingAid && cd ParkingAid && git clone git@github.com:ParkingAid/parkingaidcrm.git CRM && git clone git@github.com:ParkingAid/parkingaid-worldwide.git APP && git clone git@github.com:ParkingAid/traffic-platform.git TRAFFIC'
+
+alias update_crm='cd ~/Desktop/ParkingAid && rm -rf CRM && git clone git@github.com:ParkingAid/parkingaidcrm.git CRM && cd CRM && cursor .'
+
+alias update_app='cd ~/Desktop/ParkingAid && rm -rf APP && git clone git@github.com:ParkingAid/parkingaid-worldwide.git APP && cd APP && cursor .'
+
+# Project Generator Alias
+alias create-project='/Users/lualbuqu/Desktop/projects/AppBase/create-project.sh'

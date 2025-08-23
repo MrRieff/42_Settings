@@ -2,8 +2,7 @@
 
 # Specify the directories where your folders are located
 base_directories=(
-    "~/Desktop/42/Cursus"
-    "~/Desktop/42/Settings"
+    "~/Desktop"
     # Add more base directories as needed
 )
 

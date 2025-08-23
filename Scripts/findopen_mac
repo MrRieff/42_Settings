@@ -138,9 +138,7 @@ list_files_and_folders() {
 main() {
     # Specify the base directories
     base_directories=(
-        "/Users/ludvigrieff/Desktop/42/Cursus"
-        "/Users/ludvigrieff/Desktop/42/Settings"
-        # Add more base directories as needed
+        "/Users/lualbuqu/Desktop/"
     )
 
     # Check if an argument is provided

@@ -1,38 +1,33 @@
 #SETTINGS FOR PATHS AND SOURCES
 
 #-----------Edit--------------
-alias edit_path='vim ~/Desktop/42/Settings/Alias/.bash_aliases'
-alias update_path='source ~/Desktop/42/Settings/Alias/.bash_aliases'
+alias edit_path='vim ~/Desktop/.settings/Alias/.bash_alias'
+alias update_path='source ~/Desktop/42/Settings/Alias/.bash_alias'
 
-alias edit_alias='vim ~/Desktop/42/Settings/Alias/.alias'
-alias update_alias='source ~/Desktop/42/Settings/Alias/.alias'
+alias edit_alias='vim ~/Desktop/.settings/Alias/.alias'
+alias update_alias='source ~/Desktop/.settings/Alias/.alias'
 
-alias edit_library='vim ~/Desktop/42/Settings/Alias/.libraries'
-alias update_library='source ~/Desktop/42/Settings/Alias/.libraries'
+alias edit_library='vim ~/Desktop/.settings/Alias/.libraries'
+alias update_library='source ~/Desktop/.settings/Alias/.libraries'
 
 alias edit_zh='vim ~/.zshrc'
 alias update_zh='source ~/.zshrc'
 
 #-----------PATHS-------------
-source ~/Desktop/42/Settings/Alias/.alias
-source ~/Desktop/42/Settings/Alias/.libraries
+source ~/Desktop/.settings/Alias/.alias
+source ~/Desktop/.settings/Alias/.libraries
 
 #----------Scripts------------
-source ~/Desktop/42/Settings/Scripts/MakefileRunner.sh
+source ~/Desktop/.settings/Scripts/MakefileRunner.sh
 #source ~/Desktop/42/Settings/Scripts/findopen_mac
 
 if [ -f ~/Desktop/42/Settings/Alias/.alias ]; then
-. ~/Desktop/42/Settings/Alias/.alias
+. ~/Desktop/.settings/Alias/.alias
 fi
 
 #--------Francinette----------
-alias francinette='~/francinette/tester.sh'
-alias paco='~/francinette/tester.sh'
-
-#--------Enviorment-----------
-export PATH=$PATH:/Users/ludvigrieff/.venv/bin
-alias env='source ~/Desktop/Enviorments/enviorments/base_env/bin/activate'
-#I don't have the enviorment setup in this machine
+#alias francinette='~/francinette/tester.sh'
+#alias paco='~/francinette/tester.sh'
 
 #---------Homebrew------------
 export PATH="/opt/homebrew/opt/llvm/bin:$PATH"

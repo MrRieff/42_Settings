@@ -1,5 +1,3 @@
 #SETTINGS FOR LIBRARY PATHS
 
 #------------C------------
-#PATHS
-export CPATH="~/Desktop/Github/Cursus/libft/libft.h"
