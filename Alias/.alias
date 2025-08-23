@@ -30,4 +30,4 @@ alias update_crm='cd ~/Desktop/ParkingAid && rm -rf CRM && git clone git@github.
 alias update_app='cd ~/Desktop/ParkingAid && rm -rf APP && git clone git@github.com:ParkingAid/parkingaid-worldwide.git APP && cd APP && cursor .'
 
 # Project Generator Alias
-alias create-project='/Users/lualbuqu/Desktop/projects/AppBase/create-project.sh'
+alias create-project='/Users/lualbuqu/Desktop/.settings/Scripts/create-project.sh'

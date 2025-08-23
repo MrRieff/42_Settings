@@ -38,32 +38,6 @@ prompt_input() {
     done
 }
 
-# Function to prompt for selection
-prompt_selection() {
-    local prompt="$1"
-    shift
-    local options=("$@")
-    local var_name="${options[-1]}"
-    unset 'options[-1]'
-    
-    echo -e "${YELLOW}$prompt${NC}"
-    for i in "${!options[@]}"; do
-        echo "  $((i+1)). ${options[i]}"
-    done
-    
-    while true; do
-        echo -e "${YELLOW}Enter your choice (1-${#options[@]}): ${NC}"
-        read -r choice
-        
-        if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "${#options[@]}" ]; then
-            eval "$var_name='${options[$((choice-1))]}'"
-            break
-        else
-            echo -e "${RED}Invalid choice. Please enter a number between 1 and ${#options[@]}.${NC}"
-        fi
-    done
-}
-
 # Get project details
 prompt_input "📁 Where do you want to create the project? (use '.' for current directory or provide full path):" "PROJECT_PATH" ""
 prompt_input "📝 What's the name of your project?" "PROJECT_NAME" '[[ "$input" =~ ^[a-zA-Z][a-zA-Z0-9_-]*$ ]]'
@@ -119,12 +93,22 @@ while true; do
     fi
 done
 
+# Git repository option
+echo -e "${YELLOW}🔧 Do you want to initialize a Git repository? (Y/n): ${NC}"
+read -r git_init
+if [[ ! "$git_init" =~ ^[Nn]$ ]]; then
+    INIT_GIT=true
+else
+    INIT_GIT=false
+fi
+
 echo ""
 echo -e "${GREEN}📋 Project Configuration:${NC}"
 echo -e "  Name: ${BLUE}$PROJECT_NAME${NC}"
 echo -e "  Path: ${BLUE}$PROJECT_FULL_PATH${NC}"
 echo -e "  Type: ${BLUE}$PROJECT_TYPE${NC}"
 echo -e "  Database: ${BLUE}$DATABASE_TYPE${NC}"
+echo -e "  Git Repository: ${BLUE}$([ "$INIT_GIT" = true ] && echo "Yes" || echo "No")${NC}"
 echo ""
 
 # Confirm
@@ -139,6 +123,28 @@ fi
 echo -e "${GREEN}📁 Creating project directory...${NC}"
 mkdir -p "$PROJECT_FULL_PATH"
 cd "$PROJECT_FULL_PATH"
+
+# Initialize Git repository if requested
+if [ "$INIT_GIT" = true ]; then
+    echo -e "${GREEN}🔧 Initializing Git repository...${NC}"
+    git init
+    
+    # Check if user has git config set
+    if ! git config user.name > /dev/null 2>&1 || ! git config user.email > /dev/null 2>&1; then
+        echo -e "${YELLOW}⚠️  Git user not configured. Setting up...${NC}"
+        
+        # Prompt for git config if not set
+        if ! git config user.name > /dev/null 2>&1; then
+            prompt_input "📝 Enter your Git username:" "GIT_USERNAME" ""
+            git config user.name "$GIT_USERNAME"
+        fi
+        
+        if ! git config user.email > /dev/null 2>&1; then
+            prompt_input "📧 Enter your Git email:" "GIT_EMAIL" ""
+            git config user.email "$GIT_EMAIL"
+        fi
+    fi
+fi
 
 # Initialize project based on type
 if [[ "$PROJECT_TYPE" == "Web Application (with directory routing)" ]]; then
@@ -377,7 +383,9 @@ else
     "react-native": "0.79.5",
     "react-native-safe-area-context": "^5.6.1",
     "react-native-screens": "^4.15.1",
-    "@tanstack/react-query": "^5.85.5"
+    "@tanstack/react-query": "^5.85.5",
+    "@react-navigation/native": "^6.1.9",
+    "@react-navigation/native-stack": "^6.9.17"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -591,12 +599,6 @@ const styles = StyleSheet.create({
   },
 });
 EOF
-
-    # Add navigation dependencies for mobile
-    npm_packages="@react-navigation/native @react-navigation/native-stack react-native-screens react-native-safe-area-context"
-    sed -i '' 's/"@tanstack\/react-query": "^5.85.5"/"@tanstack\/react-query": "^5.85.5",\
-    "@react-navigation\/native": "^6.1.9",\
-    "@react-navigation\/native-stack": "^6.9.17"/' package.json
 fi
 
 # Create common files
@@ -782,13 +784,8 @@ case "$DATABASE_TYPE" in
         echo -e "${GREEN}🔥 Setting up Firebase...${NC}"
         
         # Add Firebase dependencies
-        if [[ "$PROJECT_TYPE" == "Web Application (with directory routing)" ]]; then
-            sed -i '' 's/"@tanstack\/react-query": "^5.85.5"/"@tanstack\/react-query": "^5.85.5",\
+        sed -i '' 's/"@tanstack\/react-query": "^5.85.5"/"@tanstack\/react-query": "^5.85.5",\
     "firebase": "^10.7.1"/' package.json
-        else
-            sed -i '' 's/"@tanstack\/react-query": "^5.85.5"/"@tanstack\/react-query": "^5.85.5",\
-    "firebase": "^10.7.1"/' package.json
-        fi
         
         # Create Firebase config
         cat > src/lib/firebase.ts << 'EOF'
@@ -906,13 +903,8 @@ EOF
         echo -e "${GREEN}⚡ Setting up Supabase...${NC}"
         
         # Add Supabase dependencies
-        if [[ "$PROJECT_TYPE" == "Web Application (with directory routing)" ]]; then
-            sed -i '' 's/"@tanstack\/react-query": "^5.85.5"/"@tanstack\/react-query": "^5.85.5",\
+        sed -i '' 's/"@tanstack\/react-query": "^5.85.5"/"@tanstack\/react-query": "^5.85.5",\
     "@supabase\/supabase-js": "^2.38.4"/' package.json
-        else
-            sed -i '' 's/"@tanstack\/react-query": "^5.85.5"/"@tanstack\/react-query": "^5.85.5",\
-    "@supabase\/supabase-js": "^2.38.4"/' package.json
-        fi
         
         # Create Supabase config
         cat > src/lib/supabase.ts << 'EOF'
@@ -1150,6 +1142,21 @@ EOF
     esac
 fi
 
+if [ "$INIT_GIT" = true ]; then
+    cat >> README.md << 'EOF'
+
+## 🔧 Git Repository
+
+This project is initialized with Git. To connect to a remote repository:
+
+```bash
+git remote add origin <your-repository-url>
+git branch -M main
+git push -u origin main
+```
+EOF
+fi
+
 cat >> README.md << 'EOF'
 
 ## 🎯 Next Steps
@@ -1165,6 +1172,28 @@ EOF
 # Install dependencies
 echo -e "${GREEN}📦 Installing dependencies...${NC}"
 npm install
+
+# Git operations
+if [ "$INIT_GIT" = true ]; then
+    echo -e "${GREEN}🔧 Setting up Git repository...${NC}"
+    
+    # Add all files to git
+    git add .
+    
+    # Create initial commit
+    git commit -m "🎉 Initial commit
+
+✨ Features:
+- $PROJECT_TYPE setup
+- TypeScript configuration
+- $DATABASE_TYPE integration
+- Environment variables configured
+- Project structure established
+
+Generated with Project Generator 🚀"
+    
+    echo -e "${GREEN}✅ Git repository initialized with initial commit${NC}"
+fi
 
 # Final success message
 echo ""
@@ -1182,6 +1211,13 @@ else
     echo "  2. npm run dev           # Start development server"
 fi
 
+if [ "$INIT_GIT" = true ]; then
+    echo ""
+    echo -e "${GREEN}🔧 Git Repository Ready!${NC}"
+    echo "  • Repository initialized with initial commit"
+    echo "  • To connect to remote: git remote add origin <url>"
+    echo "  • To push: git push -u origin main"
+fi
+
 echo ""
 echo -e "${GREEN}✨ Happy coding! ✨${NC}"
-EOF
