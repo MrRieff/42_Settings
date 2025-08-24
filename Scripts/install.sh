@@ -37,7 +37,7 @@ case "$SHELL_NAME" in
         fi
         ;;
     "zsh")
-        SHELL_CONFIG="/Users/lualbuqu/Desktop/.settings/Alias/.alias"
+        SHELL_CONFIG="$HOME/.zshrc"
         ;;
     "fish")
         SHELL_CONFIG="$HOME/.config/fish/config.fish"

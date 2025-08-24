@@ -2,7 +2,7 @@
 
 #-----------Edit--------------
 alias edit_path='vim ~/Desktop/.settings/Alias/.bash_alias'
-alias update_path='source ~/Desktop/42/Settings/Alias/.bash_alias'
+alias update_path='source ~/Desktop/.settings/Alias/.bash_alias'
 
 alias edit_alias='vim ~/Desktop/.settings/Alias/.alias'
 alias update_alias='source ~/Desktop/.settings/Alias/.alias'
@@ -10,8 +10,8 @@ alias update_alias='source ~/Desktop/.settings/Alias/.alias'
 alias edit_library='vim ~/Desktop/.settings/Alias/.libraries'
 alias update_library='source ~/Desktop/.settings/Alias/.libraries'
 
-alias edit_zh='vim ~/.zshrc'
-alias update_zh='source ~/.zshrc'
+alias edit_zsh='vim ~/.zshrc'
+alias update_zsh='source ~/.zshrc'
 
 #-----------PATHS-------------
 source ~/Desktop/.settings/Alias/.alias
