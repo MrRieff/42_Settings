@@ -1,14 +1,19 @@
 #SETTNGS FOR ALIAS
 
+#---------KVASIR--------------
+alias start_kvasir='/Users/lualbuqu/Desktop/kvasir/infra/scripts/run-all.sh'
+alias stop_kvasir='/Users/lualbuqu/Desktop/kvasir/infra/scripts/stop-all.sh'
+alias restart_kvasir='stop_kvasir && start_kvasir'
+
 #-----------GIT---------------
 alias send='~/Desktop/.settings/Scripts/send'
 alias sendf='~/Desktop/.settings/Scripts/send_force'
 alias receive='~/Desktop/.settings/Scripts/receive'
 
 #-----------VS-Code-----------
-alias open='~/Desktop/.settings/Scripts/open'
-alias find='~/Desktop/.settings/Scripts/findopen_mac'
-alias goto='~/Desktop/.settings/Scripts/goto_mac'
+#alias open='~/Desktop/.settings/Scripts/open'
+#alias find='~/Desktop/.settings/Scripts/findopen_mac'
+#alias goto='~/Desktop/.settings/Scripts/goto_mac'
 
 #---------COMPILE-------------
 alias cc='cc -Wall -Wextra -Werror'
@@ -18,9 +23,13 @@ alias cursus='cd ~/Desktop/42/Cursus'
 alias settings='cd ~/Desktop/.settings/'
 alias format='c_formatter_42'
 alias formatall='~/Desktop/.settings/Scripts/formatter'
+alias review='coderabbit review'
+alias review_uncommited='coderabbit review --uncommitted'
+alias review_all='coderabbit review --uncommitted --include-untracked'
+alias venv='source .venv/bin/activate'
 
 alias git_update='cd ~/Desktop && rm -rf Github && git clone git@github.com:MrRieff/42.git Github && cd Github'
-alias mini='cd ~/Desktop && rm -rf Minishell && git clone git@github.com:MrRieff/Minishell.git Minishell && cd Minishell && cursor .'
+alias mini_update='cd ~/Desktop && rm -rf Minishell && git clone git@github.com:MrRieff/Minishell.git Minishell && cd Minishell && cursor .'
 
 
 alias update_pa='cd ~/Desktop && rm -rf ParkingAid && mkdir ParkingAid && cd ParkingAid && git clone git@github.com:ParkingAid/parkingaidcrm.git CRM && git clone git@github.com:ParkingAid/parkingaid-worldwide.git APP && git clone git@github.com:ParkingAid/traffic-platform.git TRAFFIC'
@@ -29,5 +38,16 @@ alias update_crm='cd ~/Desktop/ParkingAid && rm -rf CRM && git clone git@github.
 
 alias update_app='cd ~/Desktop/ParkingAid && rm -rf APP && git clone git@github.com:ParkingAid/parkingaid-worldwide.git APP && cd APP && cursor .'
 
+alias update_traffic='cd ~/Desktop/ParkingAid && rm -rf Traffic && git clone git@github.com:ParkingAidAB/trafficplatform-temp.git Traffic && cd Traffic && cursor .'
+
+alias parkingaid='cd ~/Desktop/Parkingaid'
+
+alias traffic='parkingaid && cd Traffic'
+
+alias serve='supabase functions serve --env-file ./supabase/.env'
 # Project Generator Alias
 alias create-project='/Users/lualbuqu/Desktop/.settings/Scripts/create-project.sh'
+
+#TAIGA USER AND PASSWORD
+export TAIGA_USER='mr_rieff'
+export TAIGA_PASS='LJASR03out2001!'
