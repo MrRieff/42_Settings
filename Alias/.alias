@@ -27,6 +27,8 @@ alias settings='cd ~/.settings/'
 #alias review_uncommited='coderabbit review --uncommitted'
 #alias review_all='coderabbit review --uncommitted --include-untracked'
 alias venv='source .venv/bin/activate'
+alias pipeline='cd ~/.HumanitPipeServices'
+
 
 #alias git_update='cd ~/Desktop && rm -rf Github && git clone git@github.com:MrRieff/42.git Github && cd Github'
 #alias mini_update='cd ~/Desktop && rm -rf Minishell && git clone git@github.com:MrRieff/Minishell.git Minishell && cd Minishell && cursor .'
